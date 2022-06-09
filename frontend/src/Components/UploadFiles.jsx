@@ -4,12 +4,14 @@ import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 import Form from 'react-bootstrap/Form';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 
 import icono from '../Images/red-de-computadoras.png'
 
-
 const UploadFiles = () => {
-    const [fileData, setFileData] = useState()
+    const [fileData, setFileData] = useState();
+    const [archivo, setArchivo] = useState('');
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
@@ -18,16 +20,30 @@ const UploadFiles = () => {
         setFileData(e.target.files[0])
     }
 
-    const onSubmitHandler = (e) => {
+    const onSubmitRequest = (e) => {
 
-        if (fileData != undefined) {
+        e.preventDefault();
+
+        if (archivo !== ''){
+            fetch(`http://localhost:5000/buscar/${archivo}`)
+            .then(res => 
+                res.json()
+               // console.log(res)
+            )
+            .then(res => 
+                console.log(res)
+            )
+        } 
+    }
+
+    const onSubmitUpload = (e) => {
+
+        if (fileData !== undefined) {
 
             e.preventDefault();
-
             const data = new FormData()
 
             data.append('image', fileData)
-
             fetch('http://localhost:5000/upload', {
                 method: 'POST',
                 body: data,
@@ -38,7 +54,6 @@ const UploadFiles = () => {
                 console.log(err.message)
             })
         }
-
     }
 
     return (
@@ -55,24 +70,44 @@ const UploadFiles = () => {
                                 className="d-inline-block align-top"
                             />
                             {' '}
-                            Subida de archivos
+                            Gestor de archivos
                         </Navbar.Brand>
                         <Navbar.Toggle />
                         <Navbar.Collapse className="justify-content-end">
                             <Navbar.Text>
-                                Linux Principal
+                                Peer to Peer
                             </Navbar.Text>
                         </Navbar.Collapse>
                     </Container>
                 </Navbar>
             </Container>
-            <Container className='Formulario'>
-                <Form onSubmit={onSubmitHandler}>
-                    <Form.Control type='file' onChange={fileChangeHandler}></Form.Control>
-                    {' '}
-                    <Button type='submit'>Subir archivo</Button>
-                </Form>
-            </Container>
+            <Row>
+                <Col>
+                    <Container className='Formulario'>
+                        <Form onSubmit={onSubmitUpload}>
+                            <Form.Control type='file' onChange={fileChangeHandler}></Form.Control>
+                            {' '}
+                            <Container className='BotonSubir'>
+                                <Button type='submit'>Subir archivo</Button>
+                            </Container>
+                        </Form>
+                    </Container>
+                </Col>
+                <Col>
+                    <Container className='Formulario'>
+                        <Form onSubmit={onSubmitRequest}>
+                            <Form.Control type='text' onChange={(e) => {
+                                setArchivo(e.target.value)
+                                console.log(archivo)
+                            }}></Form.Control>
+                            {' '}
+                            <Container className='BotonSubir'>
+                                <Button type='submit'>Solicitar archivo</Button>
+                            </Container>
+                        </Form>
+                    </Container>
+                </Col>
+            </Row>
             <Modal show={show} onHide={handleClose}>
                 <Modal.Body>Documento subido con exito!!!</Modal.Body>
                 <Modal.Footer>
