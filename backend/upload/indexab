@@ -1,0 +1,27 @@
+ta) { 
+        res.send(data.toString()); 
+    } ) 
+
+ })
+ 
+const PORT=3001;
+app.listen(PORT)
+console.log(`Server is running in port ${PORT}`)
+
+//===========================  LEER EL PUERTO SERIAL ================================
+
+// // iniciamos conexion con nuestro arduino en el COM que le especificamos y a 9600 bauds
+// const port = new SerialPort( 
+//     {
+//         path: 'COM4',
+//         baudRate: 9600
+//     }
+// )
+
+// // Si hay un error esta funcion nos muestra que salio mal
+// port.on('error', function(err) {
+//     console.log('Error: ', err.message)
+// })
+
+// // Este parser  nos lo transforma a string cada que encuentre un ~
+// const parser = port.pipe(new Readl

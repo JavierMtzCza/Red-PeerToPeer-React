@@ -1,0 +1,3 @@
+n = sys.argv[1].split(".")
+
+system("cat "+ nombreSin

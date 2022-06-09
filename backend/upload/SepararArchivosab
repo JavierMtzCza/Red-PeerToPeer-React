@@ -1,0 +1,2 @@
+mbreArchivo = sys.argv[1]
+nombreSinEx

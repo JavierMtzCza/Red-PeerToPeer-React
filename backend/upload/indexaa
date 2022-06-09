@@ -1,0 +1,30 @@
+const express = require('express');
+const { SerialPort } = require('serialport')
+const { ReadlineParser } = require('@serialport/parser-readline')
+
+const app = express();
+
+let base =  [
+    {
+        "luz":0,
+        "temp":0,
+        "ventilador":0,
+        "foco": false,
+    },
+]
+   
+app.get('/', (request, response) => {
+    response.send('hola');
+})
+
+//Obtener todos los datos de los sensores (usamos solo el 1)
+app.get('/data',(request,response) => {
+   response.json(base);
+})
+
+app.get('/script',(req,res) => {
+    
+    var spawn = require("child_process").spawn; 
+    var process = spawn('python3',["script.py",'hola', 'hola'] ); 
+  
+    process.stdout.on('data', function(da
