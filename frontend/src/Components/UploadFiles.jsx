@@ -6,13 +6,15 @@ import Navbar from 'react-bootstrap/Navbar';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Dropdown from 'react-bootstrap/Dropdown'
 
 import icono from '../Images/red-de-computadoras.png'
 
 const UploadFiles = () => {
     const [fileData, setFileData] = useState();
-    const [archivo, setArchivo] = useState('');
     const [show, setShow] = useState(false);
+    const [documentos, setDocumentos] = useState([]);
+    const [seleccion, setSeleccion] = useState('');
 
     const handleClose = () => setShow(false);
 
@@ -20,20 +22,23 @@ const UploadFiles = () => {
         setFileData(e.target.files[0])
     }
 
-    const onSubmitRequest = (e) => {
-
-        e.preventDefault();
-
-        if (archivo !== ''){
-            fetch(`http://localhost:5000/buscar/${archivo}`)
-            .then(res => 
-                res.json()
-               // console.log(res)
-            )
+    const solicitarArchivo = () => {
+        if(seleccion != ''){
+            fetch(`http://localhost:5000/buscar/${seleccion}`)
             .then(res => 
                 console.log(res)
             )
-        } 
+        }
+    }
+
+    const actualizarLista = () => {
+        fetch(`http://localhost:5000/`)
+        .then(res => 
+            res.json()
+        )
+        .then(res => 
+            setDocumentos(res)
+        )
     }
 
     const onSubmitUpload = (e) => {
@@ -42,14 +47,14 @@ const UploadFiles = () => {
 
             e.preventDefault();
             const data = new FormData()
-
             data.append('image', fileData)
             fetch('http://localhost:5000/upload', {
                 method: 'POST',
                 body: data,
-            }).then((result) => {
-                //console.log('File sent success')
+            }).then(() => {
                 setShow(true)
+            }).then(()=>{
+                actualizarLista()
             }).catch((err) => {
                 console.log(err.message)
             })
@@ -95,16 +100,19 @@ const UploadFiles = () => {
                 </Col>
                 <Col>
                     <Container className='Formulario'>
-                        <Form onSubmit={onSubmitRequest}>
-                            <Form.Control type='text' onChange={(e) => {
-                                setArchivo(e.target.value)
-                                console.log(archivo)
-                            }}></Form.Control>
-                            {' '}
-                            <Container className='BotonSubir'>
-                                <Button type='submit'>Solicitar archivo</Button>
-                            </Container>
-                        </Form>
+                        <Dropdown>
+                            <Dropdown.Toggle variant="success" id="dropdown-basic">
+                                Seleccione el archivo a solicitar
+                            </Dropdown.Toggle>
+                            <Dropdown.Menu>
+                                {documentos.map((doc) => (
+                                    <Dropdown.Item id={doc.id} key={doc.id} onClick={(e)=>setSeleccion(e.target.id)}>
+                                        {doc.name}
+                                    </Dropdown.Item>
+                                ))}
+                            </Dropdown.Menu>
+                        </Dropdown>
+                        <Button onClick={solicitarArchivo}>seleccion</Button>
                     </Container>
                 </Col>
             </Row>
@@ -116,7 +124,7 @@ const UploadFiles = () => {
                     </Button>
                 </Modal.Footer>
             </Modal>
-        </Container>
+        </Container >
     )
 }
 

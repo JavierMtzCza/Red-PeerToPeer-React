@@ -1,0 +1,4 @@
+#####
+GET http://localhost:5000/buscar/aa7e32c4-2d71-47f3-8b42-430e2a010ac1 HTTP/1.1
+#####
+GET http://localhost:5000/ HTTP/1.1
