@@ -1,2 +1,0 @@
-]) 
-print("Last name: " + sys.argv[2]) 
