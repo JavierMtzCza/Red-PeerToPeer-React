@@ -1,7 +1,7 @@
 import Navbar from 'react-bootstrap/Navbar';
 import Container from 'react-bootstrap/Container';
 
-import icono from '../Images/red-de-computadoras.png';
+import icono from '../Images/ESCOMLOGO.png';
 
 const Navegacion = () => {
     return (
@@ -22,7 +22,7 @@ const Navegacion = () => {
                     <Navbar.Toggle />
                     <Navbar.Collapse className="justify-content-end">
                         <Navbar.Text>
-                            Peer to Peer
+                            ESCOM
                         </Navbar.Text>
                     </Navbar.Collapse>
                 </Container>

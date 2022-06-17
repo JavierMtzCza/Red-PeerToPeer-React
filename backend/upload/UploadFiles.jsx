@@ -56,7 +56,7 @@ const UploadFiles = () => {
             }).then(() => {
                 actualizarLista()
             }).then(() => {
-                setSuccess('La lista de archivos a descargar se actualizo exitosamente!')
+                setSuccess('El archivo se ha subido exitosamente! Lista de archivos a solicitar actualizada')
             }).catch((err) => {
                 console.log(err.message)
             })
@@ -94,19 +94,18 @@ const UploadFiles = () => {
                                             id: e.target.id,
                                             nombreArchivo: document.getElementById(e.target.id).textContent
                                         })
-                                        document.getElementById('hola').style.display = 'block'
+                                        document.getElementsByClassName('BotonDescargar').style.display = 'block'
                                     }}>
                                         {doc.name}
                                     </Dropdown.Item>
                                 ))}
                             </Dropdown.Menu>
                         </Dropdown>
-                        <Container className='BotonDescargar' id='hola'>
+                        <Container className='BotonDescargar' >
                             <Button onClick={async () => {
-                                    const res = await fetch(`http://localhost:5000/download/${seleccion.id}`)
-                                    const blob = await res.blob();
+                                const res = await fetch(`http://localhost:5000/download/${seleccion.id}`)
+                                const blob = await res.blob();
                                 download(blob, seleccion.nombreArchivo);
-                                document.getElementById('hola').style.display = 'none'
                             }}>
                                 Descargar archivo
                             </Button>

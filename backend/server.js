@@ -1,7 +1,10 @@
 const express = require('express')
 const multer = require('multer')
 const cors = require('cors')
+const path = require('path');
 const { v4: uuidv4 } = require('uuid');
+
+const uploadFolder = path.join(__dirname, "upload");
 
 const app = express()
 app.use(cors())
@@ -25,9 +28,9 @@ app.get('/', (req, res) => {
 
 app.get('/buscar/:id', (req, res) => {
     const id = req.params.id
-    console.log(id)
+    console.log(uploadFolder)
     const doc = Documentos.find(doc => doc.id === id)
-    res.send(doc.name)
+    res.send(uploadFolder)
 })
 
 app.post('/upload', upload.single('image'), (req, res) => {
@@ -40,14 +43,18 @@ app.post('/upload', upload.single('image'), (req, res) => {
     Documentos.push(doc)
     console.log(Documentos)
     res.send('Single File Upload')
+})
 
-    // SEPARAMOS AL MOMENTO DE SUBIR Y MANDAMOS
-    var spawn = require("child_process").spawn; 
-    var process = spawn('python3',["SepararArchivos.py",req.file.originalname] ); 
-  
-    process.stdout.on('data', function(data) { 
-        console.log(data)
-    } ) 
+app.get('/download/:id',(req, res) => {
+    const id = req.params.id
+    const doc = Documentos.find(doc => doc.id === id)
+    console.log(uploadFolder + '/' + doc.name)
+
+    //esto regresa el archivo en la ruta upload con el nombre doc.name
+    res.download(uploadFolder + '/' + doc.name,(err)=>{
+        if(err)
+            console.log(err)
+    });
 })
 
 app.listen(5000)
